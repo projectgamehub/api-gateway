@@ -7,9 +7,13 @@ const cacheMiddleware = async (req, res, next) => {
             const key = req.originalUrl;
 
             const cachedData = await redisClient.get(key);
+
             if (cachedData) {
+                const parsedData = JSON.parse(cachedData);
                 console.log("Cache hit");
-                return res.status(200).json(JSON.parse(cachedData));
+                return res
+                    .status(parsedData?.statusCode || 200)
+                    .json(JSON.parse(cachedData));
             }
             console.log("Cache miss");
         } catch (error) {
