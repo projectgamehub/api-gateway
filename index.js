@@ -10,16 +10,21 @@ import {
     gamesProxy,
     userProxy
 } from "./proxy/index.js";
+import cacheMiddleware from "./utils/cacheMiddleware.js";
+
 const app = express();
 
 // TODO - Configure this later
 const corsOptions = {
     origin: "*",
     methods: "*",
-    allowedHeaders: ["Content-Type", "Authorization", "access-token"], // Allowed headers
+    allowedHeaders: ["Content-Type", "access-token"],
     credentials: true
 };
+
 app.use(cors(corsOptions));
+
+app.use(cacheMiddleware);
 
 app.use("/games", gamesProxy);
 
