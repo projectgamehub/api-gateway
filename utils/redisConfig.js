@@ -6,7 +6,8 @@ const client = createClient({
     password: REDIS_PASS,
     socket: {
         host: "redis-15169.c264.ap-south-1-1.ec2.redns.redis-cloud.com",
-        port: 15169
+        port: 15169,
+        timeout: 10000
     }
 });
 
