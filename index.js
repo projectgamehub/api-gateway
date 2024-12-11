@@ -11,6 +11,7 @@ import {
     userProxy
 } from "./proxy/index.js";
 import cacheMiddleware from "./utils/cacheMiddleware.js";
+import rateLimiter from "./utils/rateLimiter.js";
 
 const app = express();
 
@@ -18,12 +19,10 @@ const app = express();
 const corsOptions = {
     origin: "*",
     methods: "*",
-    allowedHeaders: ["Content-Type", "access-token"],
-    credentials: true
+    allowedHeaders: ["Content-Type", "access-token"]
 };
 
 app.use(cors(corsOptions));
-
 app.use(cacheMiddleware);
 
 app.use("/games", gamesProxy);
@@ -33,6 +32,9 @@ app.use("/user", userProxy);
 app.use("/friend", friendProxy);
 
 app.use("/chat", chatProxy);
+
+const generalLimiter = rateLimiter(60 * 1000, 15);
+app.use(generalLimiter);
 
 app.use("/mailing", mailingProxy);
 
